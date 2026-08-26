@@ -12,7 +12,7 @@ function query($query) {
     return $rows;
 }
 
-
+// fungsi tambah
 function tambah($data) {
     global $conn;
     $nip = htmlspecialchars($data["nip"]);
