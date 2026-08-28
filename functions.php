@@ -14,6 +14,7 @@ function query($query) {
 
 // fungsi tambah
 function tambah($data) {
+    
     global $conn;
     $nip = htmlspecialchars($data["nip"]);
     $nama = htmlspecialchars($data["nama"]);
@@ -95,6 +96,7 @@ function ubah($data) {
     } else {
         $gambar = upload();
     }
+
     
     // query insert data
     $query = "UPDATE mahasiswa SET
@@ -121,6 +123,36 @@ function cari($keyword) {
     return query($query);
 }
 
+function registrasi($data) {
+    global $conn;
+    $username = strtolower(stripslashes($data["username"])); 
+    $password = mysqli_real_escape_string($conn, $data["password"]);
+    $password2 = mysqli_real_escape_string($conn, $data["password2"]);
+
+    // cek username ada atau belum
+    $result = mysqli_query($conn, "SELECT username FROM user WHERE username = '$username'");
+    if(mysqli_fetch_assoc($result)) {
+        echo "<script>
+                alert ('ID Sudah Digunakan');
+              </script>";
+        return false;
+    }
+
+    // cek konfirmasi password
+    if ($password !== $password2) {
+        echo "<script>
+                alert ('konfirmasi password tidak sesuai');
+              </script>";
+        return false;
+    }
+
+    // enkripsi password JANGAN PAKE MD5 BISA DICOPY KE GOOGLE
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    // tambahkan userbaru ke database
+    mysqli_query($conn, "INSERT INTO user (username, password) 
+                        VALUES ('$username', '$password')");
+    return mysqli_affected_rows($conn);
+}
+
 ?>
-
-
