@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+if(!isset($_SESSION["login"])) {
+    header("Location: login.php");
+    exit;
+}
 // hubungkan dengan fungsi
 require 'functions.php';
 
@@ -36,7 +42,7 @@ if ( isset( $_POST["submit"] ) ) {
 </head>
 <body>
     <h1>Tambah data Mahasiswa</h1>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         <ul>
             <li>
                 <label for="nip">NIP :</label>
@@ -56,7 +62,7 @@ if ( isset( $_POST["submit"] ) ) {
             </li>
             <li>
                 <label for="gambar">Gambar :</label>
-                <input type="text" name="gambar" id="gambar" required>
+                <input type="file" name="gambar" id="gambar" required>
             </li>
             <li>
                 <button type="submit" name="submit">Tambah Data!</button>
